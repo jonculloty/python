@@ -7,6 +7,8 @@
 # This script finds all these entries and counts SYN attempts per IP
 #
 
+# collaborate :)
+
 import re
 
 ips = {}
