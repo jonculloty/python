@@ -1,0 +1,28 @@
+# Clone repo
+git clone https://github.com/jonculloty/python
+
+# Create branch
+git branch newbranch
+
+# Select branch
+git checkout newbranch
+
+# View branch
+git branch
+
+# Edit file
+vi scanner.py
+
+# View change
+git status
+
+# Commit
+git commit -a -m "some edit" 
+
+# Change back to master
+git checkout master
+
+# Push branch edit
+git push origin renaming
+
+# Pull merge on github.com
