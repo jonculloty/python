@@ -38,8 +38,8 @@ class Scanner:
         for element in xmldoc.getElementsByTagName('geoplugin_countryName'):
             return element.firstChild.nodeValue
 
-    def PrintReport(self, ips):
-        for key, value in ips.items():
+    def PrintSortedReport(self, ips):
+        for key, value in sorted(ips.iteritems(), key=lambda (k,v): (v,k), reverse=True):
             country = self.GetLocation(key)
             print "%-20s %-5s %s" % (key,value,country)
 
@@ -47,4 +47,4 @@ if __name__ == "__main__":
 
     x = Scanner()
     susIPs = x.CheckBruteForce()
-    x.PrintReport(susIPs)
+    x.PrintSortedReport(susIPs)
