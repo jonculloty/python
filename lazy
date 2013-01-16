@@ -23,6 +23,6 @@ git commit -a -m "some edit"
 git checkout master
 
 # Push branch edit
-git push origin renaming
+git push origin newbranch
 
 # Pull merge on github.com
