@@ -1,0 +1,89 @@
+__author__ = 'culljon'
+
+import socket
+import sys
+
+class Request:
+
+    def __init__(self, met, dir, ver, hea):
+        self.method = met
+        self.directory = dir
+        self.version = ver
+        self.headers = hea
+
+    def describe_request(self):
+        print "Request: ",self.method
+        print "Directory: ",self.directory
+        print "Version: ",self.version
+        print "Headers"
+        for header in self.headers:
+            print "\t-> ",header
+        print ""
+
+
+class DummyWebsite:
+
+    # Start on port 555 if none specified
+    def startUp(self, port=555):
+        print "Listening Port: ",port
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        try:
+            s.bind(('', port))
+        except:
+            print "ERROR:  ", sys.exc_info()[0]
+            print "ERROR:  ", sys.exc_info()[1]
+            sys.exit(1)
+
+        print "Hit me!\n"
+        s.listen(1)
+        return s
+
+
+    def accept_request(self, c):
+
+        rawdata = c.recv(1024)
+        (method, directory, version) = rawdata.split("\n")[0].split()
+        heads = []
+        for line in rawdata.split("\r\n")[1:]:
+            if line:
+                heads.append(line)
+
+        request = Request(method, directory, version, heads)
+        return request
+
+    def send_response(selfself, c):
+        response = "HTTP/1.1 200 OK \n\Content-Type: text/html; encoding=utf8\n"
+        c.sendall(response)
+        # Blank line between response headers and body required
+        c.sendall('\n')
+
+        html = "<html> \
+                <head> \
+               </head> \
+               <body> \
+               <H1>This is a fake Web Server</H1> \
+               <p>Courtesy of Python</p> \
+               </body> \
+               </html>"
+        c.sendall(html)
+
+
+if __name__ == "__main__":
+
+    # Setup Server
+    dummy = DummyWebsite()
+    sock = dummy.startUp(1088)
+
+    # Accept new connections
+    conn, addr = sock.accept()
+    print 'Connection from', addr, "\n"
+
+    # Read Request
+    request = dummy.acceptRequest(conn)
+    request.describe_request()
+
+    # Send Response
+    dummy.sendResponse(conn)
+
+    conn.close()
+    print "Complete"
